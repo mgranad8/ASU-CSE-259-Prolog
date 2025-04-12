@@ -101,7 +101,12 @@ prove(L => R) :-
  * and then add A to the left and B to the right.
  */
 % Write your code here
-
+prove(L => R) :-
+  member(A -> B, R),
+  del(A -> B, R, NewR),
+  nl, write('=t'), write([A | L] => [B | NewR]),
+  write('\t (by arrow/right)'),
+  prove([A | L] => [B | NewR]).
 
 % Implement all branching rules below by following Wangs algorithm
 /*
@@ -112,7 +117,37 @@ prove(L => R) :-
  * Both of these must be proved in order to prove the original theorem.
  */
 % Write your code here
+prove(L => R) :-
+  member(A v B, L),
+  del(A v B, L, NewL),
+  nl,
+  write('\tFirst branch: '),
+  nl,
+  write('=\t'), write([A | NewL] => R),
+  write('\t (by or/left)'),
+  prove([A | NewL] => R),
+  nl,
+  write('\tSecond branch: '),
+  nl,
+  write('=\t'), write([B | NewL] => R),
+  write('\t (by or/left)'),
+  prove([B | NewL] => R).
 
+prove(L => R) :- 
+  member(A ^ B, R),
+  del(A ^ B, R, NewR),
+  nl,
+  write('\tFirst branch: '),
+  nl,
+  write('=\t', write(L => [A | NewR]),
+  write('\t (by and/right)'),
+  prove(L => [A | NewR]),
+  nl,
+  write('\tSecond branch: '),
+  nl,
+  write('=\t'), write(L => [B | NewR]),
+  write('\t (by and/right)'),
+  prove(L => [B | NewR]).
 
 
 /*
